@@ -1,0 +1,96 @@
+---
+import Tag from './Tag.astro';
+import { experiences } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const locale = lang === 'fr' ? 'fr-FR' : 'en-US';
+const formatMonth = (ym: string) =>
+	new Date(`${ym}-01T00:00:00Z`).toLocaleDateString(locale, { month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+
+<section id="experience" class="section">
+	<div class="container">
+		<h2 class="section-title">{t('experience.title')}</h2>
+		<ol class="timeline">
+			{
+				experiences.map((xp) => (
+					<li>
+						<div class="dates mono muted">
+							{formatMonth(xp.start)} — {xp.end ? formatMonth(xp.end) : t('experience.present')}
+						</div>
+						<div class="body">
+							<h3>
+								{xp.role[lang]} <span class="at">@ {xp.company}</span>
+								{xp.client && <span class="muted client">({xp.client})</span>}
+							</h3>
+							<p class="muted context">
+								{xp.context[lang]} · {xp.location[lang]}
+							</p>
+							<ul class="highlights">
+								{xp.highlights[lang].map((h) => <li>{h}</li>)}
+							</ul>
+							<div class="tags">
+								{xp.stack.map((s) => <Tag>{s}</Tag>)}
+							</div>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.timeline {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 2.75rem;
+	}
+	.timeline > li {
+		display: grid;
+		grid-template-columns: 11rem 1fr;
+		gap: 1.5rem;
+	}
+	.dates {
+		font-size: 0.8rem;
+		padding-top: 0.3rem;
+	}
+	h3 {
+		font-size: 1.15rem;
+		margin: 0;
+	}
+	.at {
+		color: var(--accent);
+	}
+	.client {
+		font-weight: 400;
+		font-size: 0.95rem;
+	}
+	.context {
+		margin: 0.25rem 0 0.75rem;
+		font-size: 0.925rem;
+	}
+	.highlights {
+		margin: 0 0 1rem;
+		padding-left: 1.1rem;
+		display: grid;
+		gap: 0.35rem;
+	}
+	.highlights li::marker {
+		color: var(--accent);
+	}
+	@media (max-width: 760px) {
+		.timeline > li {
+			grid-template-columns: 1fr;
+			gap: 0.25rem;
+		}
+	}
+</style>

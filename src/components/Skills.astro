@@ -1,0 +1,42 @@
+---
+import Tag from './Tag.astro';
+import { skillGroups } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section id="skills" class="section">
+	<div class="container">
+		<h2 class="section-title">{t('skills.title')}</h2>
+		<div class="grid">
+			{
+				skillGroups.map((group) => (
+					<div class="card">
+						<h3>{group.title[lang]}</h3>
+						<div class="tags">
+							{group.items.map((item) => <Tag>{item}</Tag>)}
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+		gap: 1rem;
+	}
+	h3 {
+		font-size: 1rem;
+		margin: 0 0 1rem;
+	}
+</style>

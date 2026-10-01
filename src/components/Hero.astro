@@ -1,0 +1,121 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { Image } from 'astro:assets';
+import portrait from '../assets/portrait.png';
+import { profile } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const home = getRelativeLocaleUrl(lang, '');
+---
+
+<section class="hero">
+	<div class="container layout">
+		<div class="intro">
+			<p class="mono kicker">{t('hero.greeting')}</p>
+			<h1>{profile.name}</h1>
+			<p class="role">{t('hero.role')} <span class="mono muted">· Java · Spring Boot · DDD · AWS</span></p>
+			<p class="pitch">{t('hero.pitch')}</p>
+			<div class="cta">
+				<a class="btn btn-primary" href={`${home}#contact`}>{t('hero.cta.contact')}</a>
+				<a class="btn" href={`${home}#projects`}>{t('hero.cta.projects')}</a>
+			</div>
+			<ul class="meta mono muted">
+				<li><a href={profile.github} rel="me">github.com/tonyadji</a></li>
+				<li><a href={profile.linkedin} rel="me">linkedin.com/in/tony-adji</a></li>
+				<li>{t('hero.location')}</li>
+			</ul>
+		</div>
+		<div class="photo">
+			<Image src={portrait} alt={profile.name} width={420} densities={[1, 2]} format="webp" loading="eager" fetchpriority="high" />
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		padding: 5rem 0 4.5rem;
+	}
+	.layout {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: center;
+		gap: 3rem;
+	}
+	.photo {
+		width: clamp(200px, 30vw, 320px);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		overflow: hidden;
+		background: radial-gradient(circle at 50% 40%, var(--accent-soft), color-mix(in srgb, var(--accent) 35%, var(--accent-soft)));
+		border: 1px solid var(--border);
+	}
+	.photo img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 15%;
+	}
+	@media (max-width: 760px) {
+		.hero {
+			padding-top: 3rem;
+		}
+		.layout {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+		.photo {
+			order: -1;
+			width: 180px;
+		}
+	}
+	.kicker {
+		color: var(--accent);
+		margin: 0 0 0.5rem;
+	}
+	h1 {
+		font-size: clamp(2.25rem, 6vw, 3.75rem);
+		margin: 0;
+	}
+	.role {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0.75rem 0 0;
+	}
+	.role span {
+		font-size: 0.9rem;
+		font-weight: 400;
+	}
+	.pitch {
+		max-width: 42rem;
+		font-size: 1.125rem;
+		color: var(--muted);
+		margin: 1.5rem 0 2rem;
+	}
+	.cta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.5rem;
+		list-style: none;
+		padding: 0;
+		margin: 2.5rem 0 0;
+		font-size: 0.85rem;
+	}
+	.meta a {
+		color: inherit;
+	}
+	.meta a:hover {
+		color: var(--accent);
+	}
+</style>

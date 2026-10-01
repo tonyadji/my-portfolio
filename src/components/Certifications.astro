@@ -1,0 +1,78 @@
+---
+import Tag from './Tag.astro';
+import { certifications } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+
+<section id="certifications" class="section">
+	<div class="container">
+		<h2 class="section-title">{t('certs.title')}</h2>
+		<div class="grid">
+			<div>
+				<h3>{t('certs.goals')}</h3>
+				<ul>
+					{
+						certifications.goals.map((c) => (
+							<li class="card goal">
+								<span>{c.name}</span>
+								<Tag variant="warn">{t('certs.inProgress')}</Tag>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+			<div>
+				<h3>{t('certs.earned')}</h3>
+				<ul>
+					{
+						certifications.earned.map((c) => (
+							<li class="card">
+								<span>{c.name}</span>
+								<span class="mono muted">{c.year}</span>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+		gap: 2rem;
+	}
+	h3 {
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--muted);
+		margin: 0 0 1rem;
+	}
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.75rem;
+	}
+	li {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 1rem 1.25rem;
+		font-weight: 500;
+	}
+	.goal {
+		border-style: dashed;
+	}
+</style>

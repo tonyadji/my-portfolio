@@ -1,0 +1,40 @@
+---
+import { profile } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+
+<section id="contact" class="section">
+	<div class="container">
+		<h2 class="section-title">{t('contact.title')}</h2>
+		<p class="text">{t('contact.text')}</p>
+		<div class="cta">
+			<a class="btn btn-primary" href={`mailto:${profile.email}`}>{t('contact.email')}</a>
+			<a class="btn" href={profile.linkedin} rel="me">LinkedIn</a>
+			<a class="btn" href={profile.github} rel="me">GitHub</a>
+		</div>
+		<p class="mono muted email">{profile.email}</p>
+	</div>
+</section>
+
+<style>
+	.text {
+		max-width: 38rem;
+		font-size: 1.125rem;
+		margin: 0 0 2rem;
+	}
+	.cta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+	.email {
+		margin-top: 1.5rem;
+		font-size: 0.875rem;
+	}
+</style>

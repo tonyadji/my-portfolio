@@ -1,0 +1,65 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Tag from './Tag.astro';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+	href: string;
+	lang: Lang;
+}
+
+const { project, href, lang } = Astro.props;
+const { title, tagline, repo, status, stack } = project.data;
+const t = useTranslations(lang);
+---
+
+<article class="card project">
+	<div class="head">
+		<h3><a href={href}>{title}</a></h3>
+		<Tag variant={status === 'wip' ? 'warn' : 'accent'}>{t(`status.${status}`)}</Tag>
+	</div>
+	<p class="muted">{tagline}</p>
+	<div class="tags">
+		{stack.map((s) => <Tag>{s}</Tag>)}
+	</div>
+	<div class="links">
+		<a href={href}>{t('projects.details')} →</a>
+		<a href={repo} class="mono">GitHub ↗</a>
+	</div>
+</article>
+
+<style>
+	.project {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		transition: border-color 0.15s;
+	}
+	.project:hover {
+		border-color: var(--accent);
+	}
+	.head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+	h3 {
+		font-size: 1.35rem;
+		margin: 0;
+	}
+	h3 a {
+		color: var(--text);
+		text-decoration: none;
+	}
+	p {
+		margin: 0;
+	}
+	.links {
+		display: flex;
+		gap: 1.25rem;
+		margin-top: auto;
+		font-size: 0.925rem;
+	}
+</style>

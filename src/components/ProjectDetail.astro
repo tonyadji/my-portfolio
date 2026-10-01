@@ -1,0 +1,79 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tag from './Tag.astro';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+	slug: string;
+	entry: CollectionEntry<'projects'>;
+}
+
+const { lang, slug, entry } = Astro.props;
+const { title, tagline, repo, status, stack } = entry.data;
+const { Content } = await render(entry);
+const t = useTranslations(lang);
+---
+
+<BaseLayout lang={lang} title={title} description={tagline} path={`projects/${slug}`}>
+	<article class="container project">
+		<a class="back mono" href={`${getRelativeLocaleUrl(lang, '')}#projects`}>← {t('projects.back')}</a>
+		<header>
+			<div class="title-row">
+				<h1>{title}</h1>
+				<Tag variant={status === 'wip' ? 'warn' : 'accent'}>{t(`status.${status}`)}</Tag>
+			</div>
+			<p class="tagline muted">{tagline}</p>
+			<div class="tags">{stack.map((s) => <Tag>{s}</Tag>)}</div>
+			<a class="btn" href={repo}>{t('projects.source')} ↗</a>
+		</header>
+		<div class="prose">
+			<Content />
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.project {
+		max-width: 780px;
+		padding-top: 3rem;
+		padding-bottom: 5rem;
+	}
+	.back {
+		font-size: 0.85rem;
+		text-decoration: none;
+	}
+	header {
+		display: grid;
+		gap: 1.25rem;
+		justify-items: start;
+		padding: 2rem 0 2.5rem;
+		border-bottom: 1px solid var(--border);
+	}
+	.title-row {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	h1 {
+		font-size: clamp(2rem, 5vw, 3rem);
+		margin: 0;
+	}
+	.tagline {
+		font-size: 1.15rem;
+		margin: 0;
+	}
+	.prose :global(h2) {
+		font-size: 1.35rem;
+		margin: 2.5rem 0 1rem;
+	}
+	.prose :global(li) {
+		margin-bottom: 0.5rem;
+	}
+	.prose :global(li::marker) {
+		color: var(--accent);
+	}
+</style>

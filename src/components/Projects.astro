@@ -1,0 +1,39 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import ProjectCard from './ProjectCard.astro';
+import { getProjects } from '../data/projects';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const projects = await getProjects(lang);
+---
+
+<section id="projects" class="section">
+	<div class="container">
+		<h2 class="section-title">{t('projects.title')}</h2>
+		<p class="muted intro">{t('projects.intro')}</p>
+		<div class="grid">
+			{
+				projects.map(({ entry, slug }) => (
+					<ProjectCard project={entry} lang={lang} href={getRelativeLocaleUrl(lang, `projects/${slug}`)} />
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.intro {
+		margin: -1rem 0 2rem;
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+		gap: 1rem;
+	}
+</style>
