@@ -9,7 +9,7 @@ stack: [Java 25, Spring Boot, PostgreSQL, Keycloak, S3 (RustFS), React, TypeScri
 
 ## L’idée
 
-Mbia permet aux familles de construire leur arbre ensemble, d’associer photos et histoires à leurs proches, et de s’inviter mutuellement à contribuer — en privé.
+Mbia permet aux familles de construire leur patrimoine digital ensemble, raconter des souvenirs, d’associer photos et histoires à leurs proches, créer leur arbre généalogique et de s’inviter mutuellement à contribuer — en privé.
 
 ## Comment c’est construit
 
